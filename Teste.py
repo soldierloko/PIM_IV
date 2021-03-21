@@ -7,14 +7,15 @@ cursor = conn.cursor()
 
 # criando a tabela (schema)
 cursor.execute("""
-CREATE TABLE  TD_CLIENTES (
+CREATE TABLE  TD_CADASTRO (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        Aluno_Professor TEXT NOT NULL,
+        matricula TEXT NOT NULL,
         nome TEXT NOT NULL,
         cpf     VARCHAR(11) NOT NULL,
         email TEXT NOT NULL,
         fone TEXT,
         dtNascimento DATE NOT NULL,
-        classificacao INT NOT NULL,
         criado_em DATE NOT NULL
 );""")
 
