@@ -56,8 +56,8 @@ while True:
                         dtNascimento = input('Digite a Data de Nascimento: ')
                         classificacao = 1
 
-                        cl.Pessoa(nome,cpf,email,telefone,dtNascimento,classificacao)
-                        print(cl.Pessoa)
+                        Pessoa(nome,cpf,email,telefone,dtNascimento,classificacao)
+                        print(Pessoa)
                         break                        
                         # a Data de Corte [DD/MM/AAAA]
                         

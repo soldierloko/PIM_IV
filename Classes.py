@@ -14,5 +14,5 @@ class Pessoa:
     def getNome(self,nome):
         return self.nome
 
-class Usuario(Pessoa):
-    def __init__(self,)
+# class Usuario(Pessoa):
+#     def __init__(self,)
