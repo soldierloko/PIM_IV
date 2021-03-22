@@ -1,6 +1,8 @@
 import sqlite3
 import os
 from Classes import Aluno_Professor
+from datetime import date
+from datetime import sleep
 
 #Define o Menu Iniciar do Programa
 def exibir_menu(): 
@@ -10,36 +12,31 @@ def exibir_menu():
         print('''
 
         1 - Cadastro
-        2 - Reserva
-        3 - Devolução
-        4 - Relatório
-        5 - Sair
+        2 - Cadastro Equipamento
+        3 - Reserva
+        4 - Devolução
+        5 - Relatório
+        6 - Sair
         ''')
         print('*'*50)
-
-def Abre_Banco():
-    #Abrindo conexão com o BD para persistir ou consultar dados
-    conn = sqlite3.connect('SRE.db')
-    cursor = conn.cursor()
-
-def Fecha_Banco():
-    #Fecha instancia com o BD
-    conn.close()
 
 #Função de novos cadastros
 def cadastro():
     os.system('cls') or None
-
+    slv = "N"
     conf = "S"
+    #Faça até que eu mande Sair
     while conf == "S":
+        #Armazena os valores nas classes criadas
         a = Aluno_Professor(AP = input('Digite a [P] para Professor e [A] para Aluno: ').upper
                             ,matricula = input('Digite a Matricula: ').upper
                             ,nome = input('Digite o Nome: ').upper
                             ,cpf = input('Digite o CPF: ').upper
-                            ,email = input('Digite o Email: ').upper
+                            ,email = input('Digite o Email: ').lower
                             ,telefone = input('Digite o Telefone: ').upper
                             ,dtNasc = input('Digite a Data de Nascimento: ').upper)
 
+        #Coloca na tela todos os valores armazenados
         print(f"A = Aluno / P = Professor: {a.AP()}")
         print(f"Matricula: {a.matricula()}")
         print(f"Nome: {a.nome()}")
@@ -47,14 +44,53 @@ def cadastro():
         print(f"E-mail: {a.email()}")
         print(f"Telefone: {a.telefone()}")
         print(f"Data de Nascimento: {a.dtNasc()}")
-        Ins = input('Deseja Salvar o Cadastro [S/N]? ')
+        #Pergunta se quer mesmo cadastrar o usuário
+        slv = input('Deseja Salvar o Cadastro [S/N]? ')
 
-        if Ins.upper == 'S':
-            Abre_Banco()
-            cursor.execute("INSERT INTO TD_CADASTRO VALUES ('" + a.AP() + "','" + a.matricula() + "','" + a.nome() + "','" + a.cpf() + "','" + a.email() + "','" + a.telefone() + "','" + a.dtNasc() + "')")
+        if  slv == "S" or slv == "s":
+            #Abrindo conexão com o BD para persistir ou consultar dados
+            conn = sqlite3.connect('SRE.db')
+            cursor = conn.cursor()
+            
+            #Comando para inserir na Tabela de Usuários
+            cursor.execute("""INSERT INTO TD_CADASTRO (Aluno_Professor,matricula,nome,cpf,email,fone,dtNascimento,criado_em)
+                              VALUES (?,?,?,?,?,?,?,?)""",(a.AP(),a.matricula(),a.nome(),a.cpf(),a.email(),a.telefone(),a.dtNasc(),date.today()))
+            #Comita o comando
             conn.commit()
-            Fecha_Banco()
-            exibir_menu()
+            #Fecha instancia com o BD
+            conn.close()
+            sleep(2)
+            print('Cadastro Realizado com Sucesso!')
+            conf = "N"
+
+#Função de novos Equipamentos
+def equipamento():
+    os.system('cls') or None
+    slv = "N"
+    conf = "S"
+    while conf == "S":
+        numSerie = input('Digite o número de série: ')
+        desDescricao = input('Digite a descrição do Equipamento: ')
+        dtCompra = input('Digite a data de compra [yyyy-mm-dd]: ')
+        desTipo = input('Digite o tipo [Audio/Video/Apoio]: ')
+        desMarca = input('Digite o Fabricante: ')
+
+        slv = input('Deseja Salvar o Equipamento [S/N]? ')
+
+        if  slv == "S" or slv == "s":
+            #Abrindo conexão com o BD para persistir ou consultar dados
+            conn = sqlite3.connect('SRE.db')
+            cursor = conn.cursor()
+            
+            cursor.execute("""INSERT INTO TD_EQUIPAMENTO (numSerie,desDescricao,dtCompra,desTipo,desMarca,criado_em)
+                              VALUES (?,?,?,?,?,?)""",(numSerie,desDescricao,dtCompra,desTipo,desMarca,date.today()))
+            #Comita o comando
+            conn.commit()
+            #Fecha instancia com o BD
+            conn.close()
+            sleep(2)
+            print('Equipamento Cadastrado Sucesso!')
+            conf = "N"
 
 
 

@@ -8,7 +8,6 @@ cursor = conn.cursor()
 # criando a tabela (schema)
 cursor.execute("""
 CREATE TABLE  TD_CADASTRO (
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         Aluno_Professor TEXT NOT NULL,
         matricula TEXT NOT NULL,
         nome TEXT NOT NULL,
@@ -21,22 +20,13 @@ CREATE TABLE  TD_CADASTRO (
 
 # criando a tabela (schema)
 cursor.execute("""
-CREATE TABLE  TD_USUARIO (
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        dtCadastro DATE NOT NULL,
-        ativo INTEGER NOT NULL
-);""")
-
-
-# criando a tabela (schema)
-cursor.execute("""
 CREATE TABLE  TD_EQUIPAMENTO (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        dtReserva DATE NULL,
-        dtRetira DATE NULL,
-        dtDevolucao DATE NULL,
+        numSerie LONG NOT NULL,
+        desDescricao TEXT NOT NULL,
+        dtCompra DATE NULL,
+        desTipo TEXT NOT NULL,
+        desMarca TEXT NOT NULL,
         criado_em DATE NOT NULL
 );""")
 
