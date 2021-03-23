@@ -2,7 +2,7 @@ import sqlite3
 import os
 from Classes import Aluno_Professor
 from datetime import date
-from datetime import sleep
+from time import sleep
 
 #Define o Menu Iniciar do Programa
 def exibir_menu(): 
@@ -89,65 +89,83 @@ def equipamento():
             #Fecha instancia com o BD
             conn.close()
             sleep(2)
-            print('Equipamento Cadastrado Sucesso!')
+            print('Equipamento Cadastrado com Sucesso!')
             conf = "N"
 
-# def reserva():
-#     os.system('cls') or None
-#     slv = "N"
-#     conf = "S"
-#     while conf == "S":
-#         #Variável para buscar o CPF
-#         numCpf = input('Digite o número do CPF: ')
-        
-#         #Abrindo conexão com o BD para persistir ou consultar dados
-#         conn = sqlite3.connect('SRE.db')
-#         cursor = conn.cursor()
-
-
-#         if  slv == "S" or slv == "s":
-#             #Abrindo conexão com o BD para persistir ou consultar dados
-#             conn = sqlite3.connect('SRE.db')
-#             cursor = conn.cursor()
-            
-#             #Busca o usuário
-#             cursor.execute("SELECT * FROM TD_CADASTRO WHERE LIKE '" + numCpf + "'")
-#             for linha in cursor.fetchall():
-#             print(linha)
-        
-            
-            
-            
-            
-            
-            
-            # #Comita o comando
-            # conn.commit()
-            # #Fecha instancia com o BD
-            # conn.close()
-            # sleep(2)
-            # print('Equipamento Cadastrado Sucesso!')
-            # conf = "N"
+def reserva():
+    os.system('cls') or None
+    # conf = 'S'
+    # while conf == "S":
+    #Variável para buscar o CPF
+    cpf = input('Digite o número do CPF: ')
     
+    #Retorna Nome e Matricula do usuário
+    try:
+        numMatricula = listar_cadastro(cpf)[0]
+        nomUser = listar_cadastro(cpf)[1]
+        os.system('cls') or None
+        print(f"Matrícula: {numMatricula}")
+        print(f"Nome: {nomUser}")
+        equipamento = input('Digite uma palavra chave do equipamento: ')
+        idEquipamento = listar_equipamento(equipamento)[0]
+        nomEquipamento = listar_equipamento(equipamento)[1]
+        print(f"Número de série: {idEquipamento}")
+        print(f"Equipamento: {nomEquipamento}")
+        datReserva = input('Digite a data de reserva [yyyy-mm-dd]: ') 
 
+        slv = input('Deseja Salvar a Reserva [S/N]? ')
 
+        if  slv == "S" or slv == "s":
+            #Abrindo conexão com o BD para persistir ou consultar dados
+            conn = sqlite3.connect('SRE.db')
+            cursor = conn.cursor()
+            
+            cursor.execute("""INSERT INTO TF_COMODATO (matAluno_Professor,idEquipamento,dtReserva,criado_em,idDevolvido)
+                              VALUES (?,?,?,?,?,?,?)""",(numMatricula,idEquipamento,datReserva,date.today(),0))
+            #Comita o comando
+            conn.commit()
+            #Fecha instancia com o BD
+            conn.close()
+            sleep(2)
+            print('Reserva Cadastrada com  Sucesso!')
+           
+    except:
+        print("Usuário ou Equipamento Não Encontrado!")
+        sleep(2)
+        os.system('cls') or None
+            
 def listar_cadastro(cpf):
     #Abrindo conexão com o BD para persistir ou consultar dados
     conn = sqlite3.connect('SRE.db')
     cursor = conn.cursor()
     
     #Busca o usuário
-    cursor.execute("SELECT * FROM TD_CADASTRO WHERE CPF LIKE '" + numCpf + "'")
-    try:
-        for linha in cursor.fetchall():
-            print(linha)
-    except:
-        print("Usuário Não encontrado")
-    #Fecha instancia com o BD
+    query = "SELECT * FROM TD_CADASTRO WHERE CPF = '" + cpf + "'"
+    cursor.execute(query)
+    
+    for linha in cursor.fetchall():
+        nome = linha[2]
+        matricula = linha[1]
+    #Fecha a conexão
     conn.close()
-    return
+    return matricula,nome
 
 
+def listar_equipamento(equipamento):
+    #Abrindo conexão com o BD para persistir ou consultar dados
+    conn = sqlite3.connect('SRE.db')
+    cursor = conn.cursor()
+    
+    #Busca o usuário
+    query = "SELECT * FROM TD_EQUIPAMENTO WHERE desDescricao LIKE '%" + equipamento + "%'"
+    cursor.execute(query)
+    
+    for linha in cursor.fetchall():
+        descricao = linha[2]
+        idEquipamento = linha[0]
+    #Fecha a conexão
+    conn.close()
+    return idEquipamento,descricao
 
 
 

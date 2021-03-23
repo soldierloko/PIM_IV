@@ -6,16 +6,18 @@ def listar_cadastro(cpf):
     cursor = conn.cursor()
     
     #Busca o usuário
-    cursor.execute("SELECT * FROM TD_CADASTRO WHERE CPF LIKE '" + cpf + "'")
+    query = "SELECT * FROM TD_CADASTRO WHERE CPF LIKE '%" + cpf + "%'"
+    cursor.execute(query)
     
     for linha in cursor.fetchall():
-        print(linha)
-
-    
-    # except:
-    #     print("Usuário Não encontrado")
-    #Fecha instancia com o BD
+        nome = linha[2]
+        matricula = linha[1]
+    #Fecha a conexão
     conn.close()
-    return
+    return matricula,nome
 
-listar_cadastro('339')
+
+print(listar_cadastro('339')[0])
+
+#if listar_cadastro('339') != None:
+ #       print('Usuário não encontrado')

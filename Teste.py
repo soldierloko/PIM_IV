@@ -34,14 +34,12 @@ CREATE TABLE  TD_EQUIPAMENTO (
 cursor.execute("""
 CREATE TABLE  TF_COMODATO (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        cpf     VARCHAR(11) NOT NULL,
-        email TEXT NOT NULL,
-        fone TEXT,
-        dtNascimento DATE NOT NULL,
-        classificacao INT NOT NULL,
-        criado_em DATE NOT NULL
-);""")
+        matAluno_Professor TEXT NOT NULL,
+        idEquipamento INTEGER NOT NULL,
+        dtReserva DATE NOT NULL,
+        criado_em DATE NOT NULL,
+        idDevolvido INTEGER NOT NULL,
+        dtDevolução DATE NULL);""")
 
 print('Tabela criada com sucesso.')
 # desconectando...
