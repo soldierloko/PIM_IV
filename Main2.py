@@ -19,8 +19,11 @@ while True:
     elif opcao == 2:
         os.system('cls') or None
         fc.equipamento()
-    # elif opcao == 3:
-    #     fc.buscar(pessoas)
+    elif opcao == 3:
+        os.system('cls') or None
+        fc.reserva()
+    
+        
     elif opcao == 6:
         print("Fechando programa!")
         sleep(2)

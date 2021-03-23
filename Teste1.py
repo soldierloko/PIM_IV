@@ -1,16 +1,21 @@
-from geopy.geocoders import Nominatim
-geolocator = Nominatim(user_agent="wazeyes") # Nome do seu aplicativo
-location = geolocator.geocode("Abel Scuissiato, 2829 colombo paraná")
-print(location.address)
-print((location.latitude, location.longitude))
-# import getpass
-# from datetime import datetime
+import sqlite3
 
-# print("Usuário.......: ", getpass.getuser())
-# print("Data Completa.: ", datetime.now())
-# print("Dia...........: ", datetime.now().day)
-# print("Mês...........: ", datetime.now().month)
-# print("Ano...........: ", datetime.now().year)
-# print("Hora..........: ", datetime.now().hour)
-# print("Minuto........: ", datetime.now().minute)
-# print("Segundo.......: ", datetime.now().second)
+def listar_cadastro(cpf):
+    #Abrindo conexão com o BD para persistir ou consultar dados
+    conn = sqlite3.connect('SRE.db')
+    cursor = conn.cursor()
+    
+    #Busca o usuário
+    cursor.execute("SELECT * FROM TD_CADASTRO WHERE CPF LIKE '" + cpf + "'")
+    
+    for linha in cursor.fetchall():
+        print(linha)
+
+    
+    # except:
+    #     print("Usuário Não encontrado")
+    #Fecha instancia com o BD
+    conn.close()
+    return
+
+listar_cadastro('339')

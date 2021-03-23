@@ -92,6 +92,60 @@ def equipamento():
             print('Equipamento Cadastrado Sucesso!')
             conf = "N"
 
+# def reserva():
+#     os.system('cls') or None
+#     slv = "N"
+#     conf = "S"
+#     while conf == "S":
+#         #Variável para buscar o CPF
+#         numCpf = input('Digite o número do CPF: ')
+        
+#         #Abrindo conexão com o BD para persistir ou consultar dados
+#         conn = sqlite3.connect('SRE.db')
+#         cursor = conn.cursor()
+
+
+#         if  slv == "S" or slv == "s":
+#             #Abrindo conexão com o BD para persistir ou consultar dados
+#             conn = sqlite3.connect('SRE.db')
+#             cursor = conn.cursor()
+            
+#             #Busca o usuário
+#             cursor.execute("SELECT * FROM TD_CADASTRO WHERE LIKE '" + numCpf + "'")
+#             for linha in cursor.fetchall():
+#             print(linha)
+        
+            
+            
+            
+            
+            
+            
+            # #Comita o comando
+            # conn.commit()
+            # #Fecha instancia com o BD
+            # conn.close()
+            # sleep(2)
+            # print('Equipamento Cadastrado Sucesso!')
+            # conf = "N"
+    
+
+
+def listar_cadastro(cpf):
+    #Abrindo conexão com o BD para persistir ou consultar dados
+    conn = sqlite3.connect('SRE.db')
+    cursor = conn.cursor()
+    
+    #Busca o usuário
+    cursor.execute("SELECT * FROM TD_CADASTRO WHERE CPF LIKE '" + numCpf + "'")
+    try:
+        for linha in cursor.fetchall():
+            print(linha)
+    except:
+        print("Usuário Não encontrado")
+    #Fecha instancia com o BD
+    conn.close()
+    return
 
 
 
@@ -104,26 +158,4 @@ def equipamento():
 
 
 
-
-
-
-
-
-
-
-
-def listar(pessoas):
-    for pessoa in pessoas:
-        identificador, nome, idade = pessoa
-        print(f'Nome: {nome}, idade: {idade}, id: {identificador}')
-
-def buscar(pessoas):
-    identificador_desejado = input('Id? ')
-    for pessoa in pessoas:
-        identificador, nome, idade = pessoa
-        if identificador == identificador_desejado:
-            print(f'Nome: {nome}, idade: {idade}, id: {identificador}')
-            break
-    else:
-        print(f'Pessoa com id {identificador_desejado} não encontrada')
 
