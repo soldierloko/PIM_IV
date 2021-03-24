@@ -15,8 +15,7 @@ def exibir_menu():
         2 - Cadastro Equipamento
         3 - Reserva
         4 - Devolução
-        5 - Relatório
-        6 - Sair
+        5 - Sair
         ''')
         print('*'*50)
 
@@ -59,8 +58,8 @@ def cadastro():
             conn.commit()
             #Fecha instancia com o BD
             conn.close()
-            sleep(2)
             print('Cadastro Realizado com Sucesso!')
+            sleep(2)
             conf = "N"
 
 #Função de novos Equipamentos
@@ -94,8 +93,6 @@ def equipamento():
 
 def reserva():
     os.system('cls') or None
-    # conf = 'S'
-    # while conf == "S":
     #Variável para buscar o CPF
     cpf = input('Digite o número do CPF: ')
     
@@ -109,7 +106,7 @@ def reserva():
         equipamento = input('Digite uma palavra chave do equipamento: ')
         idEquipamento = listar_equipamento(equipamento)[0]
         nomEquipamento = listar_equipamento(equipamento)[1]
-        print(f"Número de série: {idEquipamento}")
+        print(f"Código Equipamento: {idEquipamento}")
         print(f"Equipamento: {nomEquipamento}")
         datReserva = input('Digite a data de reserva [yyyy-mm-dd]: ') 
 
@@ -121,13 +118,14 @@ def reserva():
             cursor = conn.cursor()
             
             cursor.execute("""INSERT INTO TF_COMODATO (matAluno_Professor,idEquipamento,dtReserva,criado_em,idDevolvido)
-                              VALUES (?,?,?,?,?,?,?)""",(numMatricula,idEquipamento,datReserva,date.today(),0))
+                              VALUES (?,?,?,?,?)""",(numMatricula,idEquipamento,datReserva,date.today(),0))
             #Comita o comando
             conn.commit()
             #Fecha instancia com o BD
             conn.close()
-            sleep(2)
             print('Reserva Cadastrada com  Sucesso!')
+            sleep(2)
+            
            
     except:
         print("Usuário ou Equipamento Não Encontrado!")
@@ -167,6 +165,67 @@ def listar_equipamento(equipamento):
     conn.close()
     return idEquipamento,descricao
 
+def listar_reserva(numMatricula):
+    #Abrindo conexão com o BD para persistir ou consultar dados
+    conn = sqlite3.connect('SRE.db')
+    cursor = conn.cursor()
+    
+    #Busca o usuário
+    query = """SELECT matAluno_Professor
+                      ,B.nome 
+                      ,C.desDescricao
+                      ,A.dtReserva
+                FROM TF_COMODATO A 
+                LEFT JOIN TD_CADASTRO B 
+                ON A.matAluno_Professor = B.matricula 
+                LEFT JOIN TD_EQUIPAMENTO C
+                ON A.idEquipamento = C.ID
+                WHERE matAluno_Professor = '""" + numMatricula + "'"
+
+    cursor.execute(query)
+    
+    for linha in cursor.fetchall():
+        descEquipamento = linha[2]
+        dtReserva = linha[3]
+
+    #Fecha a conexão
+    conn.close()
+    return descEquipamento,dtReserva
+
+def devolucao():
+    os.system('cls') or None
+    #Variável para buscar o CPF
+    cpf = input('Digite o número do CPF: ')
+    
+    #Retorna Nome e Matricula do usuário
+    try:
+        numMatricula = listar_cadastro(cpf)[0]
+        print('Matricula: ', numMatricula)
+        print('Usuário:', listar_cadastro(cpf)[1])
+        print('Equipamento: ', listar_reserva(numMatricula)[0])
+        print('Data da Reserva: ', listar_reserva(numMatricula)[1])
+
+        slv = input('Deseja dar a Devolução [S/N]? ')
+
+        if  slv == "S" or slv == "s":
+            #Abrindo conexão com o BD para persistir ou consultar dados
+            conn = sqlite3.connect('SRE.db')
+            cursor = conn.cursor()
+            
+            cursor.execute("UPDATE TF_COMODATO SET idDevolvido = 0, dtDevolucao = '" + str(date.today()) + "' WHERE matAluno_Professor = '" + numMatricula + "'")
+
+            #Comita o comando
+            conn.commit()
+            #Fecha instancia com o BD
+            conn.close()
+            print('Reserva Finalizada com  Sucesso!')
+            sleep(2)
+            
+           
+    except:
+        print("Usuário ou Equipamento Não Encontrado!")
+        sleep(2)
+        os.system('cls') or None
 
 
 

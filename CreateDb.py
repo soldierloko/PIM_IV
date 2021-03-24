@@ -39,7 +39,7 @@ CREATE TABLE  TF_COMODATO (
         dtReserva DATE NOT NULL,
         criado_em DATE NOT NULL,
         idDevolvido INTEGER NOT NULL,
-        dtDevolução DATE NULL);""")
+        dtDevolucao TEXT NULL);""")
 
 print('Tabela criada com sucesso.')
 # desconectando...
